@@ -20,7 +20,8 @@ LILV_CONF_OPTS += \
 	-Dhtml=disabled \
 	-Dlint=false \
 	-Dsinglehtml=disabled \
-	-Dtests=disabled
+	-Dtests=disabled \
+	-Dbindings_py=enabled
 
 ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
 LILV_DEPENDENCIES += libsndfile
