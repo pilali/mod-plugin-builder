@@ -14,7 +14,6 @@ LILV_INSTALL_STAGING = YES
 
 LILV_CONF_OPTS += \
 	-Dbindings_cpp=disabled \
-	-Dbindings_py=disabled \
 	-Ddocs=disabled \
 	-Ddynmanifest=disabled \
 	-Dhtml=disabled \
