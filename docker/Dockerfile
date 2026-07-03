@@ -66,7 +66,7 @@ RUN if test "$platform" = "modduo" || test "$platform" = "modduo-new" || test "$
     fi
 
 # mod-plugin-builder settings
-ENV MPB_GIT_URL https://github.com/moddevices/mod-plugin-builder
+ENV MPB_GIT_URL https://github.com/pilali/mod-plugin-builder
 
 # ct-ng settings
 ENV CT_ALLOW_BUILD_AS_ROOT_SURE y
@@ -75,6 +75,14 @@ ENV CT_ALLOW_BUILD_AS_ROOT_SURE y
 WORKDIR /root
 RUN git clone $MPB_GIT_URL
 WORKDIR mod-plugin-builder
+# kernel.org removed v3.x and v4.x directories; pre-download from git.kernel.org before crosstool-ng tries
+RUN LINUX_VERSION=$(grep "CT_LINUX_VERSION=" toolchain/${platform}.config | cut -d'"' -f2) && \
+    LINUX_MAJOR=$(echo ${LINUX_VERSION} | cut -d'.' -f1) && \
+    if [ "${LINUX_MAJOR}" -lt 5 ]; then \
+        mkdir -p /root/mod-workdir/download && \
+        wget "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot/linux-${LINUX_VERSION}.tar.gz" \
+             -O "/root/mod-workdir/download/linux-${LINUX_VERSION}.tar.gz"; \
+    fi
 RUN ./bootstrap.sh $platform $target && ./.clean-install.sh $platform
 
 # CMD
